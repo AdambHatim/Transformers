@@ -2,9 +2,10 @@ from spacy.tokens import Doc
 import json
 import spacy
 from collections import Counter
+import torch
 
 class Tokenizer:
-  def __init__(self, train_path, val_path, test_path, load_path = None, translation = "en->de",):
+  def __init__(self, train_path, val_path, test_path, load_path = None, translation = "en->de"):
 
     self.train = self.load_json(train_path)
     self.val = self.load_json(val_path)
@@ -27,6 +28,7 @@ class Tokenizer:
       self.spacy_en = spacy.load("en_core_web_sm")
       self.spacy_de = spacy.load("de_core_news_sm")
 
+    
   def load_json(self, path):
     data = []
     with open(path, "r", encoding="utf-8") as f:
@@ -140,7 +142,7 @@ class Tokenizer:
         detokenized_data.append(doc.text)
 
     return detokenized_data
-  def pad_sequence(self, tokenized_sentences,device = DEVICE, pad_token=2):
+  def pad_sequence(self, tokenized_sentences, pad_token=2):
     # find maximum length
     lengths = [len(tokenized_sentence) for tokenized_sentence in tokenized_sentences]
     max_length = max(lengths)
